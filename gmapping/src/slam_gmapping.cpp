@@ -609,6 +609,8 @@ SlamGMapping::addScan(const sensor_msgs::LaserScan& scan, GMapping::OrientedPoin
 void
 SlamGMapping::laserCallback(const sensor_msgs::LaserScan::ConstPtr& scan)
 {
+  struct timespec ts_start, ts_end;
+  clock_gettime(CLOCK_REALTIME, &ts_start);
   laser_count_++;
   if ((laser_count_ % throttle_scans_) != 0)
     return;
@@ -649,6 +651,26 @@ SlamGMapping::laserCallback(const sensor_msgs::LaserScan::ConstPtr& scan)
     }
   } else
     ROS_DEBUG("cannot process scan");
+  clock_gettime(CLOCK_REALTIME, &ts_end);
+  struct tm tm;
+  localtime_r( &ts_start.tv_sec, &tm);
+  std::string s,e;
+  s+=std::to_string(tm.tm_sec);
+  // s+=std::to_string(ts_start.tv_nsec);
+  localtime_r( &ts_end.tv_sec, &tm);
+  e+=std::to_string(tm.tm_sec);
+  // e+=std::to_string(ts_end.tv_nsec);
+  std::cout << "\n" << (std::stod(e) - std::stod(s)) << "\n";
+
+  // if ((std::stod(e) - std::stod(s))/100 > 0.001 && (std::stod(e) - std::stod(s))/100 < 100000){
+  //   static int N = 0;
+  //       static double z = 0;
+  //   double ave;
+  //       z = (std::stod(e) - std::stod(s))/100 + (N++)*z;
+  //   z/=N;
+  //   ave = z;
+  //   std::cout << ave << "\n";
+  // }
 }
 
 double
