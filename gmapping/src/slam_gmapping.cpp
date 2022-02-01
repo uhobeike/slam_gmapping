@@ -656,11 +656,11 @@ SlamGMapping::laserCallback(const sensor_msgs::LaserScan::ConstPtr& scan)
   localtime_r( &ts_start.tv_sec, &tm);
   std::string s,e;
   s+=std::to_string(tm.tm_sec);
-  // s+=std::to_string(ts_start.tv_nsec);
+  s+=std::to_string(ts_start.tv_nsec);
   localtime_r( &ts_end.tv_sec, &tm);
   e+=std::to_string(tm.tm_sec);
-  // e+=std::to_string(ts_end.tv_nsec);
-  std::cout << "\n" << (std::stod(e) - std::stod(s)) << "\n";
+  e+=std::to_string(ts_end.tv_nsec);
+  std::cout << "\n" << (std::stod(e) - std::stod(s))/1000000 << "\n";
 
   // if ((std::stod(e) - std::stod(s))/100 > 0.001 && (std::stod(e) - std::stod(s))/100 < 100000){
   //   static int N = 0;
